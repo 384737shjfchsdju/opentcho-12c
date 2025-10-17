@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCHO - 首页</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Arial", sans-serif; }
+        body { background: #f5f5f5; color: #333; }
+        /* 导航栏 */
+        .nav { background: #2c3e50; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { color: #fff; font-size: 1.2rem; font-weight: bold; }
+        .nav-menu { display: flex; gap: 1.5rem; }
+        .nav-menu a { color: #fff; text-decoration: none; }
+        .mobile-menu-btn { display: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+        /* 首页内容 */
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        .section { margin-bottom: 3rem; }
+        h2 { margin-bottom: 1.5rem; color: #2c3e50; border-left: 4px solid #3498db; padding-left: 0.5rem; }
+        /* 视频播放区 */
+        .video-container { width: 100%; background: #000; border-radius: 8px; overflow: hidden; }
+        video { width: 100%; height: auto; }
+        /* 资源下载区 */
+        .download-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
+        .download-card { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+        .download-card h3 { margin-bottom: 0.5rem; color: #3498db; }
+        .download-card p { color: #666; margin-bottom: 1rem; font-size: 0.9rem; }
+        .download-btn { display: inline-block; padding: 0.6rem 1.2rem; background: #3498db; color: #fff; text-decoration: none; border-radius: 4px; font-size: 0.9rem; }
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .nav-menu { display: none; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0; background: #2c3e50; padding: 1rem; gap: 1rem; }
+            .nav-menu.show { display: flex; }
+            .mobile-menu-btn { display: block; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <div class="nav">
+        <div class="nav-logo">十二班卫生组织</div>
+        <div class="mobile-menu-btn" id="mobileMenuBtn">☰</div>
+        <div class="nav-menu" id="navMenu">
+            <a href="index.html">首页</a>
+            <a href="my-cert.html">我的认证</a>
+            <a href="download.html">资源下载</a>
+            <a href="login.html">退出登录</a>
+        </div>
+    </div>
+
+    <!-- 首页内容 -->
+    <div class="container">
+        <!-- 视频介绍区 -->
+        <section class="section">
+            <h2>科普视频讲解</h2>
+            <div class="video-container">
+                <!-- 替换为实际视频地址 -->
+                <video controls poster="video-cover.jpg">
+                    <source src="science-video.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放
+                </video>
+            </div>
+        </section>
+
+        <!-- 热门资源区 -->
+        <section class="section">
+            <h2>十二班卫生资源</h2>
+            <div class="download-list">
+                <div class="download-card">
+                    <h3>001</h3>
+                    <p>tcho-001</p>
+                    <a href="001.pdf" class="download-btn" download>下载PDF</a>
+                </div>
+                <div class="download-card">
+                    <h3>002</h3>
+                    <p>002</p>
+                    <a href="files/002.pptx" class="download-btn" download>下载PPTX</a>
+                </div>
+                <div class="download-card">
+                    <h3>003</h3>
+                    <p>003</p>
+                    <a href="files/003.docx" class="download-btn" download>下载Word</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // 移动端菜单切换
+        document.getElementById("mobileMenuBtn").addEventListener("click", function() {
+            document.getElementById("navMenu").classList.toggle("show");
+        });
+    </script>
+</body>
+</html>

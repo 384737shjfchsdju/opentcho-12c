@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCHO - 管理员后台</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Arial", sans-serif; }
+        body { background: #f5f5f5; color: #333; }
+        /* 顶部导航 */
+        .admin-header { background: #2c3e50; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; color: #fff; }
+        .admin-title { font-size: 1.2rem; font-weight: bold; }
+        .logout-btn { padding: 0.5rem 1rem; background: #e74c3c; border: none; color: #fff; border-radius: 4px; cursor: pointer; }
+        /* 主体内容 */
+        .admin-container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; display: grid; grid-template-columns: 240px 1fr; gap: 2rem; }
+        /* 侧边菜单 */
+        .admin-sidebar { background: #fff; border-radius: 8px; padding: 1.5rem; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+        .sidebar-menu { list-style: none; margin-top: 1rem; }
+        .sidebar-menu li { margin-bottom: 0.5rem; }
+        .sidebar-menu a { display: block; padding: 0.8rem; border-radius: 4px; color: #333; text-decoration: none; }
+        .sidebar-menu a.active { background: #3498db; color: #fff; }
+        .sidebar-menu a:hover:not(.active) { background: #f5f5f5; }
+        /* 内容区域 */
+        .admin-content { background: #fff; border-radius: 8px; padding: 2rem; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+        .content-title { margin-bottom: 1.5rem; color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
+        /* 表单样式 */
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; color: #666; font-weight: 500; }
+        input, select { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; }
+        .btn-group { display: flex; gap: 1rem; margin-top: 1rem; }
+        .submit-btn { padding: 0.8rem 1.5rem; background: #3498db; border: none; color: #fff; border-radius: 4px; cursor: pointer; }
+        .reset-btn { padding: 0.8rem 1.5rem; background: #95a5a6; border: none; color: #fff; border-radius: 4px; cursor: pointer; }
+        /* 表格样式 */
+        .user-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        .user-table th, .user-table td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
+        .user-table th { background: #f8f9fa; color: #666; }
+        .edit-btn { padding: 0.4rem 0.8rem; background: #f39c12; border: none; color: #fff; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+        .delete-btn { padding: 0.4rem 0.8rem; background: #e74c3c; border: none; color: #fff; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .admin-container { grid-template-columns: 1fr; }
+            .user-table th:nth-child(3), .user-table td:nth-child(3) { display: none; } /* 隐藏用户状态列 */
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header class="admin-header">
+        <div class="admin-title">TCHO管理员后台</div>
+        <button class="logout-btn" onclick="window.location.href='login.html'">退出登录</button>
+    </header>
+
+    <!-- 主体内容 -->
+    <div class="admin-container">
+        <!-- 侧边菜单 -->
+        <aside class="admin-sidebar">
+            <h3>功能菜单</h3>
+            <ul class="sidebar-menu">
+                <li><a href="#user-manage" class="active">用户账号管理</a></li>
+                <li><a href="#cert-upload">答题证书上传</a></li>
+            </ul>
+        </aside>
+
+        <!-- 内容区域 -->
+        <main class="admin-content">
+            <!-- 用户账号管理 -->
+            <section id="user-manage">
+                <h3 class="content-title">用户账号管理</h3>
+                <!-- 添加用户表单 -->
+                <div class="form-card">
+                    <h4>添加新用户</h4>
+                    <form id="addUserForm">
+                        <div class="form-group">
+                            <label for="newUserId">用户ID</label>
+                            <input type="text" id="newUserId" required placeholder="设置唯一用户ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="defaultPwd">默认密码</label>
+                            <input type="text" id="defaultPwd" required placeholder="设置用户初始默认密码">
+                        </div>
+                        <div class="btn-group">
+                            <button type="submit" class="submit-btn">添加用户</button>
+                            <button type="reset" class="reset-btn">重置</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 用户列表 -->
+                <div class="user-list" style="margin-top: 2rem;">
+                    <h4>已创建用户</h4>
+                    <table class="user-table">
+                        <thead>
+                            <tr>
+                                <<th>用户ID</</th>
+                                <<th>默认密码</</th>
+                                <<th>账号状态</</th>
+                                <<th>操作</</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 后端动态渲染用户数据，此处为示例 -->
+                            <tr>
+                                <td>user001</td>
+                                <td>kp2024001</td>
+                                <td>正常</td>
+                                <td>
+                                    <button class="edit-btn">修改密码</button>
+                                    <button class="delete-btn">删除账号</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>user002</td>
+                                <td>kp2024002</td>
+                                <td>正常</td>
+                                <td>
+                                    <button class="edit-btn">修改密码</button>
+                                    <button class="delete-btn">删除账号</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 答题证书上传 -->
+            <section id="cert-upload" style="display: none; margin-top: 2rem;">
+                <h3 class="content-title">答题证书上传</h3>
+                <form id="certUploadForm">
+                    <div class="form-group">
+                        <label for="targetUserId">关联用户ID</label>
+                        <input type="text" id="targetUserId" required placeholder="输入需绑定证书的用户ID">
+                    </div>
+                    <div class="form-group">
+                        <label for="certName">证书名称</label>
+                        <input type="text" id="certName" required placeholder="如：宇宙科普答题证书（初级）">
+                    </div>
+                    <div class="form-group">
+                        <label for="certFile">上传证书图片</label>
+                        <input type="file" id="certFile" required accept="image/jpg,image/png,image/jpeg">
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="submit-btn">上传并绑定</button>
+                        <button type="reset" class="reset-btn">重置</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // 侧边菜单切换
+        const menuItems = document.querySelectorAll('.sidebar-menu a');
+        const sections = document.querySelectorAll('.admin-content section');
+        
+        menuItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                // 切换菜单激活状态
+                menuItems.forEach(mi => mi.classList.remove('active'));
+                this.classList.add('active');
+                
+                // 切换内容区域显示
+                const targetId = this.getAttribute('href').substring(1);
+                sections.forEach(section => {
+                    section.style.display = section.id === targetId ? 'block' : 'none';
+                });
+            });
+        });
+
+        // 模拟添加用户（需结合后端接口）
+        document.getElementById('addUserForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userId = document.getElementById('newUserId').value;
+            const pwd = document.getElementById('defaultPwd').value;
+            alert(`用户 ${userId} 已添加，默认密码：${pwd}`);
+            this.reset();
+            // 实际场景需向后端发送请求存储用户数据
+        });
+
+        // 模拟证书上传（需结合后端接口）
+        document.getElementById('certUploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userId = document.getElementById('targetUserId').value;
+            const certName = document.getElementById('certName').value;
+            const certFile = document.getElementById('certFile').files[0];
+            if (certFile) {
+                alert(`证书 "${certName}" 已上传并绑定至用户 ${userId}`);
+                this.reset();
+            } else {
+                alert('请选择证书图片');
+            }
+            // 实际场景需向后端发送文件和用户关联数据
+        });
+    </script>
+</body>
+</html>

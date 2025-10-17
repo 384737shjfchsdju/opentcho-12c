@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCHO - 资源下载</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Arial", sans-serif; }
+        body { background: #f5f5f5; color: #333; }
+        .nav { background: #2c3e50; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { color: #fff; font-size: 1.2rem; font-weight: bold; }
+        .nav-menu { display: flex; gap: 1.5rem; }
+        .nav-menu a { color: #fff; text-decoration: none; }
+        .mobile-menu-btn { display: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        h2 { margin-bottom: 1.5rem; color: #2c3e50; border-left: 4px solid #3498db; padding-left: 0.5rem; }
+        .download-category { margin-bottom: 2rem; }
+        .download-category h3 { color: #3498db; margin-bottom: 1rem; }
+        .download-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+        .download-table th, .download-table td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
+        .download-table th { background: #f8f9fa; color: #666; font-weight: normal; }
+        .download-btn { display: inline-block; padding: 0.5rem 1rem; background: #3498db; color: #fff; text-decoration: none; border-radius: 4px; font-size: 0.9rem; }
+        @media (max-width: 768px) {
+            .nav-menu { display: none; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0; background: #2c3e50; padding: 1rem; gap: 1rem; }
+            .nav-menu.show { display: flex; }
+            .mobile-menu-btn { display: block; }
+            .download-table th:nth-child(2), .download-table td:nth-child(2) { display: none; } /* 移动端隐藏文件大小列 */
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <div class="nav-logo">TCHO知识库</div>
+        <div class="mobile-menu-btn" id="mobileMenuBtn">☰</div>
+        <div class="nav-menu" id="navMenu">
+            <a href="index.html">首页</a>
+            <a href="my-cert.html">我的认证</a>
+            <a href="download.html">资源下载</a>
+            <a href="login.html">退出登录</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>TCHO资源下载</h2>
+
+        <!-- 001 -->
+        <div class="download-category">
+            <h3>1. 001</h3>
+            <table class="download-table">
+                <thead>
+                    <tr>
+                        <<th>资源名称</</th>
+                        <<th>文件大小</</th>
+                        <<th>下载操作</</th>
+                    </tr>
+                </thead>
+                <tbody

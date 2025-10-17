@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCHO - 线上答题</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Arial", sans-serif; }
+        body { background: #f5f5f5; color: #333; }
+        .nav { background: #2c3e50; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { color: #fff; font-size: 1.2rem; font-weight: bold; }
+        .nav-menu { display: flex; gap: 1.5rem; }
+        .nav-menu a { color: #fff; text-decoration: none; }
+        .mobile-menu-btn { display: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+        .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+        .exam-header { background: #fff; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+        .exam-title { color: #2c3e50; margin-bottom: 0.5rem; }
+        .exam-info { color: #666; font-size: 0.9rem; }
+        .question-card { background: #fff; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+        .question-title { margin-bottom: 1rem; font-weight: 500; color: #333; }
+        .option-list { list-style: none; margin-left: 0.5rem; }
+        .option-list li { margin-bottom: 0.8rem; cursor: pointer; }
+        .option-list li input { margin-right: 0.5rem; }
+        .submit-area { text-align: center; margin-top: 2rem; }
+        #submitExam { padding: 0.8rem 2rem; background: #3498db; border: none; color: #fff; border-radius: 4px; cursor: pointer; font-size: 1rem; }
+        #submitExam:disabled { background: #95a5a6; cursor: not-allowed; }
+        .result-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 100; }
+        .result-content { background: #fff; padding: 2rem; border-radius: 8px; width: 90%; max-width: 400px; text-align: center; }
+        .result-content h3 { color: #2c3e50; margin-bottom: 1rem; }
+        .score { font-size: 2rem; color: #e74c3c; margin: 1rem 0; }
+        .close-modal { padding: 0.6rem 1.2rem; background: #2c3e50; color: #fff; border: none; border-radius: 4px; cursor: pointer; margin-top: 1rem; }
+
+        @media (max-width: 768px) {
+            .nav-menu { display: none; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0; background: #2c3e50; padding: 1rem; gap: 1rem; }
+            .nav-menu.show { display: flex; }
+            .mobile-menu-btn { display: block; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏（与首页一致） -->
+    <div class="nav">
+        <div class="nav-logo">TCHO知识库</div>
+        <div class="mobile-menu-btn" id="mobileMenuBtn">☰</div>
+        <div class="nav-menu" id="navMenu">
+            <a href="index.html">首页</a>
+            <a href="my-cert.html">我的认证</a>
+            <a href="download.html">资源下载</a>
+            <a href="exam.html" style="color: #3498db; font-weight: bold;">线上答题</a>
+            <a href="login.html">退出登录</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 答题头部信息 -->
+        <div class="exam-header">
+            <h2 class="exam-title">TCHO测试</h2>
+            <p class="exam-info">共5题，满分100分 | 单选题每题10分，多选题每题15分 | 提交后实时显示成绩</p>
+        </div>
+
+        <!-- 试题区域（后端动态加载试题） -->
+        <form id="examForm">
+            <!-- 试题1（示例，实际由后端渲染） -->
+            <div class="question-card">
+                <div class="question-title">1. 001（单选题，10分）</div>
+                <ul class="option-list">
+                    <li><input type="radio" name="q1" id="q1-a" value="A"><label for="q1-a">A. 001</label></li>
+                    <li><input type="radio" name="q1" id="q1-b" value="B"><label for="q1-b">B. 001</label></li>
+                    <li><input type="radio" name="q1" id="q1-c" value="C"><label for="q1-c">C. 001</label></li>
+                    <li><input type="radio" name="q1" id="q1-d" value="D"><label for="q1-d">D. 001</label></li>
+                </ul>
+            </div>
+
+            <!-- 试题2（示例） -->
+            <div class="question-card">
+                <div class="question-title">2. 001？（多选题，15分）</div>
+                <ul class="option-list">
+                    <li><input type="checkbox" name="q2" id="q2-a" value="A"><label for="q2-a">A. 78</label></li>
+                    <li><input type="checkbox" name="q2" id="q2-b" value="B"><label for="q2-b">B. 91</label></li>
+                    <li><input type="checkbox" name="q2" id="q2-c" value="C"><label for="q2-c">C. 13</label></li>
+                    <li><input type="checkbox" name="q2" id="q2-d" value="D"><label for="q2-d">D. 91</label></li>
+                </ul>
+            </div>
+
+            <!-- 提交按钮 -->
+            <div class="submit-area">
+                <button type="submit" id="submitExam">提交试卷</button>
+            </div>
+        </form>
+
+        <!-- 成绩弹窗 -->
+        <div class="result-modal" id="resultModal">
+            <div class="result-content">
+                <h3>答题完成！</h3>
+                <p>你的最终成绩为：</p>
+                <div class="score" id="finalScore">85 分</div>
+                <p>成绩已同步至服务器，管理员可查询</p>
+                <button class="close-modal" id="closeModal">返回首页</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 移动端菜单切换（与首页一致）
+        document.getElementById("mobileMenuBtn").addEventListener("click", function() {
+            document.getElementById("navMenu").classList.toggle("show");
+        });
+
+        // 答题逻辑
+        const examForm = document.getElementById("examForm");
+        const resultModal = document.getElementById("resultModal");
+        const finalScore = document.getElementById("finalScore");
+        const closeModal = document.getElementById("closeModal");
+
+        // 后端返回的正确答案（示例，实际从服务器获取）
+        const correctAnswers = {
+            q1: "A",
+            q2: "ACD",
+            q3: "B", // 若有更多试题，需补充
+            q4: "ABD",
+            q5: "C"
+        };
+
+        // 提交试卷
+        examForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+            let totalScore = 0;
+
+            // 1. 判分逻辑（需根据实际试题数量扩展）
+            // 单选题判分（q1）
+            const q1Answer = document.querySelector('input[name="q1"]:checked')?.value;
+            if (q1Answer === correctAnswers.q1) totalScore += 10;
+
+            // 多选题判分（q2，需全部选对才得分）
+            const q2Answers = Array.from(document.querySelectorAll('input[name="q2"]:checked')).map(item => item.value).join("");
+            if (q2Answers === correctAnswers.q2) totalScore += 15;
+
+            // （补充其他试题判分逻辑...）
+
+            // 2. 显示成绩
+            finalScore.textContent = `${totalScore} 分`;
+            resultModal.style.display = "flex";
+
+            // 3. 提交成绩至服务器（需替换为后端接口）
+            const userId = "当前登录用户ID"; // 实际从登录态获取
+            fetch("/api/submit-score", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId, score: totalScore, examTime: new Date().toLocaleString() })
+            }).then(res => res.json()).then(data => {
+                console.log("成绩提交成功：", data);
+            });
+        });
+
+        // 关闭弹窗并返回首页
+        closeModal.addEventListener("click", function() {
+            resultModal.style.display = "none";
+            window.location.href = "index.html";
+        });
+    </script>
+</body>
+</html>
